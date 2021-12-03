@@ -17,7 +17,7 @@ func checkErr(err error) {
 func main() {
 
 	var posX, posZ int = 0,0
-	inputFile, myBad := os.Open("../input.txt")
+	inputFile, myBad := os.Open("input.txt")
 	checkErr(myBad)
 	defer inputFile.Close()
 

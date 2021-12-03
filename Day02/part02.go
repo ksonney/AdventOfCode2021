@@ -17,7 +17,7 @@ func checkErr(err error) {
 func main() {
 
 	var posX, posZ, aim int = 0,0,0
-	inputFile, myBad := os.Open("../input.txt")
+	inputFile, myBad := os.Open("input.txt")
 	checkErr(myBad)
 	defer inputFile.Close()
 
@@ -35,7 +35,6 @@ func main() {
 		case "up":
 			aim = aim - int(dist)
 		}
-		fmt.Println("Depth:",posZ,"Aim:",aim,"Distance:",posX)
 	}
 	
 	fmt.Println("Depth is",posZ)
