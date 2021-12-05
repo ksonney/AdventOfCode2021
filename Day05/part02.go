@@ -83,7 +83,7 @@ func getOverLap(mapData vents) int {
 	retVal := 0
 	for i := 0; i < len(mapData.fullMap); i++ {
 		for j := 0; j < len(mapData.fullMap[i]); j++ {
-			if mapData.fullMap[i][j] > 1 {
+			if mapData.fullMap[i][j] >= 2 {
 				retVal++
 			}
 		}
@@ -148,9 +148,18 @@ func mapDiagVents(mapData vents) vents {
 			c := startX
 			for c != endX && d != endY {
 				retVal.fullMap[d][c]++
-				if c < endX { c++ } else { c-- }
-				if d < endY { d++ } else { d-- }
+				if c < endX {
+					c++
+				} else {
+					c--
+				}
+				if d < endY {
+					d++
+				} else {
+					d--
+				}
 			}
+			retVal.fullMap[d][c]++
 		}
 	}
 	return retVal
