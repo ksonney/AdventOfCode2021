@@ -76,11 +76,11 @@ func main() {
 	fname := "input.txt"
 	sourceData := readData(fname)
 	school := parseData(sourceData)
-	fmt.Println(school)
+	// fmt.Println(school)
 	schoolSize := len(school)
 	fmt.Println("Initial School Size is",schoolSize)
 	for sc := 0; sc < spawnCycle; sc ++ {
-		fmt.Println("Day",sc)
+		// fmt.Println("Day",sc)
 		school = spawn(school)
 	}
 	schoolSize = len(school)
