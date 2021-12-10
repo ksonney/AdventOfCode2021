@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"math"
+	"sort"
 )
 
 var myBad error
@@ -29,8 +30,10 @@ func readData(inputFile string) []string {
 	return retVal
 }
 
-func parseData(sourceData []string, retVal []int) []int {
+func parseData(sourceData []string) []int {
 	dlen := len(sourceData)
+	var retVal []int
+
 	for c := 0; c < dlen; c++ {
 		crabData := strings.Split(sourceData[c], ",")
 		for fd := 0; fd < len(crabData); fd++ {
@@ -39,6 +42,7 @@ func parseData(sourceData []string, retVal []int) []int {
 			retVal = append(retVal, addTo)
 		}
 	}
+	sort.Ints(retVal)
 	return retVal
 }
 
@@ -50,51 +54,34 @@ func intArray(inVal []int, alen int) []int {
 	return retVal
 }
 
-func linearUpdate(numSteps float64) int {
-	en := math.Abs(float64(numSteps))
-	fmt.Println("Number of Steps",en)
-	distCalc := float64(0)
-	for st := float64(1); st <= en; st++ {
-		distCalc = distCalc + st
-		fmt.Println("Current Fuel Spent",distCalc)
+func calculateFuel(inVal []int, targetPos int) int {
+	sum := 0
+	for _, pos := range inVal {
+		fuel := 0
+		distance := int(math.Abs(float64(targetPos) - float64(pos)))
+		for d := 1; d <= distance; d++ {
+			fuel += d
+		}
+		sum += fuel
 	}
-	fmt.Println("distance",distCalc)
-	return int(distCalc)
-}
-
-func getAvg(inVal []int) float64 {
-	retVal := float64(0)
-	arLen := float64(len(inVal))
-	fullSum := float64(0)
-	
-	for ga:=float64(0); ga < arLen; ga++ {
-		fullSum += float64(inVal[int(ga)])
-	}
-	retVal = fullSum/arLen
-	return retVal
+	return sum
 }
 
 func moveCrabs(inVal []int) int {
-	var retVal int
-	var startPos float64
-	var endPos float64
 
-	endPos = math.Round(getAvg(inVal))
-	for c := 0; c < len(inVal); c++ {
-		numSteps := float64(0)
-		fmt.Println("Target Position is",endPos)
-		fmt.Println("Source Position is",inVal[c])
-		startPos= float64(inVal[c])
-		if startPos > endPos {
-			numSteps = startPos - endPos
-		} else if startPos < endPos {
-			numSteps = endPos - startPos
+	target := 0
+	prevVal := 0
+
+	for {
+		fuel := calculateFuel(inVal, target)
+		if fuel > prevVal && prevVal != 0 {
+			break
 		}
-		fmt.Println("Num Steps",numSteps)
-		retVal += linearUpdate(numSteps)
-}
-	fmt.Println("Total Fuel Spent",retVal)
-	return retVal
+		target += 1
+		prevVal = fuel
+	}
+
+	return prevVal
 }
 
 func main() {
@@ -102,14 +89,13 @@ func main() {
 	var crabsPos []int
 	var minDistance int
 	var fname string
-	fileList := []string{"sample"} //, "input"}
+	fileList := []string{"sample", "input"}
 
 	for fn := 0; fn < len(fileList); fn++ {
 		fname = fileList[fn]
 		sourceData := readData(fname + ".txt")
-		crabsPos = parseData(sourceData, crabsPos)
+		crabsPos = parseData(sourceData)
 		minDistance = moveCrabs(crabsPos)
-		fmt.Println(crabsPos)
 		fmt.Println("Minimum Move Distance for", fname, "is", minDistance)
 	}
 
