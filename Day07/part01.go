@@ -29,7 +29,8 @@ func readData(inputFile string) []string {
 	return retVal
 }
 
-func parseData(sourceData []string, retVal []int) []int {
+func parseData(sourceData []string) []int {
+	var retVal []int
 	dlen := len(sourceData)
 	for c := 0; c < dlen; c++ {
 		crabData := strings.Split(sourceData[c], ",")
@@ -79,12 +80,15 @@ func main() {
 
 	var crabsPos []int
 	var minDistance int
+	var fname string
+	fileList := []string{"sample", "input"}
 
-	// fname := "sample.txt"
-	fname := "input.txt"
-	sourceData := readData(fname)
-	crabsPos = parseData(sourceData, crabsPos)
-	minDistance = moveCrabs(crabsPos)
-	fmt.Println("Minimum Move Distance is ", minDistance)
+	for fn := 0; fn < len(fileList); fn++ {
+		fname = fileList[fn]
+		sourceData := readData(fname + ".txt")
+		crabsPos = parseData(sourceData)
+		minDistance = moveCrabs(crabsPos)
+		fmt.Println("Minimum Move Distance for", fname, "is", minDistance)
+	}
 
 }
